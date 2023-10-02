@@ -26,13 +26,8 @@ cout<<"MAX FLOW IS : "<<maxflow<<endl;
 }
 int Ford(){
     int i,j;
+     int parent[vertex];
     int maxFlow=0;
-    for(i=0;i<vertex;i++){
-        for(j=0;j<vertex;j++){
-            ResG[i][j]=graph[i][j];
-        }
-    }
-    int parent[vertex];
     while(bfs(src,des,parent)){
         int flow= INT_MAX;
         int u,v,s;
@@ -59,6 +54,7 @@ void read(){
         for(i=0;i<Siz;i++){
         for(j=0;j<Siz;j++){
             graph[i][j]=0;
+            ResG[i][j]=0;
         }
     }
         freopen("ford.txt","r",stdin);
@@ -72,28 +68,28 @@ void read(){
             m=indexnum(x);
             n=indexnum(y);
             graph[m][n]=cost;
+            ResG[m][n]=graph[m][n];
     }
         cin>>src>>des;
        vertex=Vname.size(); 
     }
 bool bfs(string source,string dest,int parent[])
 {
-    int s,t;
-    s=indexnum(source);
-    t=indexnum(dest);
-    bool visited[vertex];
-    memset(visited,0,sizeof(visited));
+    int s,desti,u;
     queue<int> q;
+    bool visited[vertex];
+    for(int i=0;i<vertex;i++)visited[i]=false;
+    s=indexnum(source);
+    desti=indexnum(dest);
     q.push(s);
     visited[s] = true;
     parent[s] = -1;
-    while (!q.empty()) {
-        int u = q.front();
+    while(!q.empty()) {
+        u = q.front();
         q.pop();
- 
         for (int v=0;v<vertex;v++) {
-            if (visited[v] == false && ResG[u][v] > 0) {
-                if (v == t) {
+            if (visited[v]==false && ResG[u][v]>0) {
+                if (v == desti) {
                     parent[v] = u;
                     return true;
                 }
